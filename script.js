@@ -69,18 +69,17 @@ class AppData {
     cancel.style.display = 'block';
 
     this.budget = +salaryAmount.value;
-    
+
     this.getExpInc()
     this.getExpensesMonth();
-    this.getAddExpenses();
-    this.getAddIncome();
+    this.getAddExpInc();
     this.getBudget();
     //this.getTargetMonth();
     //this.getStatusIncome();
 
     this.showResult();
 
-  };
+  }
 
   showResult() {
     let _this = this;
@@ -94,7 +93,7 @@ class AppData {
     periodSelect.addEventListener('input', () => {
       incomePeriodValue.value = _this.calcPeriod();
     });
-  };
+  }
 
   addExpensesBlock() {
     const cloneExpensesItem = expensesItems[0].cloneNode(true);
@@ -105,7 +104,7 @@ class AppData {
     if (expensesItems.length === 3) {
       expensesPlus.style.display = 'none';
     }
-  };
+  }
 
   addIncomeBlock() {
     const cloneIncomeItem = incomeItems[0].cloneNode(true);
@@ -116,10 +115,10 @@ class AppData {
     if (incomeItems.length === 3) {
       incomePlus.style.display = 'none';
     }
-  };
+  }
+
 
   getExpInc() {
-    
     const count = (item) => {
       const startStr = item.className.split('-')[0];
       const itemTitle = item.querySelector(`.${startStr}-title`).value;
@@ -129,36 +128,23 @@ class AppData {
         this.incomeMonth += +itemAmount;
       }
     };
-    
+
     incomeItems.forEach(count);
     expensesItems.forEach(count);
 
     for (let key in this.income) {
       this.incomeMonth += +this.income[key];
-
     }
-  };
+  }
 
-  getAddExpenses() {
-    let addExpenses = additionalExpensesItem.value.split(',');
-    let _this = this;
-    addExpenses.forEach((item) => {
-      item = item.trim();
-      if (item !== '') {
-        _this.addExpenses.push(item);
-      }
-    });
-  };
+  getAddExpInc() {
+    const elem = (item) => {
+      return item.map(el => el.trim()).filter(el => el !== '');
+    };
 
-  getAddIncome() {
-    let _this = this;
-    additionalIncomeItem.forEach((item) => {
-      let itemValue = item.value.trim();
-      if (itemValue !== '') {
-        _this.addIncome.push(itemValue);
-      }
-    })
-  };
+    this.addExpenses = elem(additionalExpensesItem.value.split(','));
+    this.addIncome = elem([additionalIncomeItem[0].value, additionalIncomeItem[1].value]);
+  }
 
   //возвращает сумму обязательных расходов
   getExpensesMonth() {
@@ -166,19 +152,19 @@ class AppData {
     for (let key in this.expenses) {
       this.expensesMonth += +this.expenses[key];
     }
-  };
+  }
 
   //возвращает  накопления за месяц. Доход минус расходы
   getBudget() {
 
     this.budgetMonth = this.budget + this.incomeMonth - this.expensesMonth;
     this.budgetDay = this.budgetMonth / 30;
-  };
+  }
 
   //результат месячного накопления
   getTargetMonth() {
     return targetAmount.value / this.budgetMonth;
-  };
+  }
 
   //функция уровень дохода
   getStatusIncome() {
@@ -199,7 +185,7 @@ class AppData {
       console.log('Где-то закралась ошибка...');
     }
     return budget;
-  };
+  }
 
   getInfoDeposit() {
     if (this.deposit) {
@@ -214,15 +200,15 @@ class AppData {
       } while (!isNumber(n) && n < 0);
       this.moneyDeposit = +n;
     }
-  };
+  }
 
   calcPeriod() {
     return this.budgetMonth * periodSelect.value;
-  };
+  }
 
   blockStart() {
     start.disabled = !salaryAmount.value.trim();
-  };
+  }
 
   reset() {
 
@@ -266,7 +252,7 @@ class AppData {
     incomePlus.removeAttribute('disabled');
     expensesPlus.removeAttribute('disabled');
     depositCheck.checked = false;
-  };
+  }
 
   eventsListeners() {
     this.blockStart();
@@ -278,7 +264,7 @@ class AppData {
     periodSelect.addEventListener('input', function () {
       periodAmount.innerText = periodSelect.value;
     });
-  };
+  }
 }
 
 const appData = new AppData();
