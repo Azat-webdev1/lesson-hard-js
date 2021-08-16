@@ -95,28 +95,17 @@ class AppData {
     });
   }
 
-  addExpensesBlock() {
-    const cloneExpensesItem = expensesItems[0].cloneNode(true);
-    cloneExpensesItem.querySelector('.expenses-title').value = '';
-    cloneExpensesItem.querySelector('.expenses-amount').value = '';
-    expensesItems[0].parentNode.insertBefore(cloneExpensesItem, expensesPlus);
-    expensesItems = document.querySelectorAll('.expenses-items');
-    if (expensesItems.length === 3) {
-      expensesPlus.style.display = 'none';
+  getExpIncBlock(e) {
+    const target = e.target;
+    const startStr = target.parentNode.className;
+    const cloneItem = document.querySelector(`.${startStr}-items`).cloneNode(true);
+    cloneItem.querySelector(`.${startStr}-title`).value = '';
+    cloneItem.querySelector(`.${startStr}-amount`).value = '';
+    target.parentNode.insertBefore(cloneItem, target);
+    if (document.querySelectorAll(`.${startStr}-items`).length === 3) {
+      target.style.display = 'none';
     }
   }
-
-  addIncomeBlock() {
-    const cloneIncomeItem = incomeItems[0].cloneNode(true);
-    cloneIncomeItem.querySelector('.income-title').value = '';
-    cloneIncomeItem.querySelector('.income-amount').value = '';
-    incomeItems[0].parentNode.insertBefore(cloneIncomeItem, incomePlus);
-    incomeItems = document.querySelectorAll('.income-items');
-    if (incomeItems.length === 3) {
-      incomePlus.style.display = 'none';
-    }
-  }
-
 
   getExpInc() {
     const count = (item) => {
@@ -257,8 +246,8 @@ class AppData {
   eventsListeners() {
     this.blockStart();
     start.addEventListener('click', this.start.bind(this));
-    expensesPlus.addEventListener('click', this.addExpensesBlock);
-    incomePlus.addEventListener('click', this.addIncomeBlock);
+    expensesPlus.addEventListener('click', this.getExpIncBlock);
+    incomePlus.addEventListener('click', this.getExpIncBlock);
     salaryAmount.addEventListener('input', this.blockStart);
     cancel.addEventListener('click', this.reset.bind(this));
     periodSelect.addEventListener('input', function () {
