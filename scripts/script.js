@@ -63,7 +63,7 @@ window.addEventListener('DOMContentLoaded', () => {
       menu = document.querySelector('menu'),
       closeBtn = document.querySelector('.close-btn'),
       menuItems = menu.querySelectorAll('ul>li');
-    
+
     let count = -100;
     const animate = () => {
       if (document.documentElement.clientWidth < 768) {
@@ -77,9 +77,19 @@ window.addEventListener('DOMContentLoaded', () => {
         cancelAnimationFrame(requestId);
       }
     };
-    
-    const handlerMenu = () => {
-      menu.classList.toggle('active-menu');
+
+    const handlerMenu = (e) => {
+      e.preventDefault();
+      if (e.target.tagName === 'a' && e.target.classlist !== 'close-btn') {
+        scrolling(e.target);
+      }
+
+      if (!menu.style.transform || menu.style.transform === `translate(-100%)`) {
+        count = -100;
+        animate();
+      } else if (e.target.tagName === 'a') {
+        menu.style.transform = `translate(-100%)`;
+      }
     };
 
     btnMenu.addEventListener('click', handlerMenu);
@@ -134,5 +144,14 @@ window.addEventListener('DOMContentLoaded', () => {
     });
   };
   togglePopup();
-
+  
+  const scrolling = (el) => {
+    if (el.href === undefined) return;
+    let link = el.href.split('#')[1];
+    document.querySelector('#' + link).scrollIntoView({
+      behavior: 'smooth',
+      block: 'start'
+    });
+  };
+  
 });
