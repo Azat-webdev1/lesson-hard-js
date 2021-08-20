@@ -71,7 +71,7 @@ window.addEventListener('DOMContentLoaded', () => {
         return;
       }
       let requestId = requestAnimationFrame(animate);
-      count += 2;
+      count += 10;
       menu.style.transform = `translate(${count}%)`;
       if (count === 0) {
         cancelAnimationFrame(requestId);
@@ -102,7 +102,13 @@ window.addEventListener('DOMContentLoaded', () => {
       menu.classList.toggle('active-menu');
       menu.style.display = 'none';
     });
-
+    
+    window.addEventListener('click', (e) => {
+      if (!menu.contains(e.target) && !btnMenu.contains(e.target)) {
+        menu.style.display = 'none';
+      }
+    });
+    
     menuItems.forEach((elem) => elem.addEventListener('click', handlerMenu));
 
   };
@@ -151,6 +157,12 @@ window.addEventListener('DOMContentLoaded', () => {
     popupClose.addEventListener('click', () => {
       popup.style.display = 'none';
     });
+
+    popup.addEventListener('click', (e) => {
+      if (popup.contains(e.target) && !popupContent.contains(e.target)) {
+        popup.style.display = 'none';
+      }
+    });
   };
   togglePopup();
 
@@ -172,4 +184,4 @@ window.addEventListener('DOMContentLoaded', () => {
   };
   scrolHead();
 
-});
+}); 
