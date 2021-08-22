@@ -9,17 +9,24 @@
   <link rel="preload" href="./font/Roboto-Bold.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="stylesheet" href="./css/style.css">
 
-  <title>input</title>
+  <title>Animating in Code!</title>
 </head>
 
 <body>
-  <div class="form__group field">
-    <input type="text" class="form__field" placeholder="Name" name="name" id='name' />
-    <label for="name" class="form__label">Введи слово</label>
-  </div>
-  <p class="block"></p>
-  <script src="./script.js"></script>
+
+  <div id="page-wrapper">
+    <h1>Animation</h1>
   
+    <div class="controls">
+      <button type="button" id="startBtn">Start Animation</button>
+      <button type="button" id="stopBtn">Stop Animation</button>
+      <button type="button" id="resetBtn">Reset</button>
+    </div>
+  
+    <canvas id="stage" width="640" height="100"></canvas>
+  </div>
+  
+  <script src="./script.js"></script>
 </body>
 
 </html>
