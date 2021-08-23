@@ -60,31 +60,23 @@ window.addEventListener('DOMContentLoaded', () => {
   // Меню
   const toggleMenu = () => {
     const menu = document.querySelector('menu');
-      
+    
     const handlerMenu = (e) => {
       const target = e.target;
     
-      if (target.closest('.menu')) {
+      if (target.closest('.menu') || !target.closest('menu')) {
         menu.classList.toggle('active-menu');
-      } else if (target !== menu && target.closest('[href^="#"]')) {
+      } else if (target.closest('menu') && target.closest('[href^="#"]')) {
         
         menu.classList.toggle('active-menu');
       }
       if (!target.classList.contains('close-btn')) {
         menu.style.display = 'flex';
       }
-      
     };
     
     document.body.addEventListener('click', handlerMenu);
     
-    /*
-    window.addEventListener('click', (e) => {
-      if (!menu.contains(e.target) && !btnMenu.contains(e.target)) {
-        menu.style.display = 'none';
-      }
-    });
-    */
   };
   
   toggleMenu();
