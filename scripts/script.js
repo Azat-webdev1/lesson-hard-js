@@ -195,7 +195,8 @@ window.addEventListener('DOMContentLoaded', () => {
         }
       }
     };
-
+    toggleTabContent(0);
+    
     tabHeader.addEventListener('click', (e) => {
       let target = e.target;
 
@@ -212,11 +213,11 @@ window.addEventListener('DOMContentLoaded', () => {
 
   tabs();
   //Слайдер
-  const slider = () => {
+  const slider1 = () => {
     const slide = document.querySelectorAll('.portfolio-item'),
       dots = document.querySelector('.portfolio-dots'),
       slider = document.querySelector('.portfolio-content');
-
+      
     for (let i = 0; i < slide.length; i++) {
       dots.insertAdjacentHTML('beforeend',
         `<li class="dot ${i === 0 ? 'dot-active' : ''}"></li>`);
@@ -302,7 +303,7 @@ window.addEventListener('DOMContentLoaded', () => {
     startSlide();
 
   };
-  slider();
+  slider1();
 
   //переключение фотографий "Наша команда"
   const toggleImageCommand = () => {
