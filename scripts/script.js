@@ -54,54 +54,31 @@ window.addEventListener('DOMContentLoaded', () => {
     updateClock();
     idInterval = setInterval(updateClock, 1000);
   };
-
-  countTimer('24 Aug 2021');
+  countTimer('20 Aug 2021');
 
   // Меню
   const toggleMenu = () => {
-    const menu = document.querySelector('menu');
-
-    let count = -100;
-    const animate = () => {
-      if (document.documentElement.clientWidth < 768) {
-        menu.style.transform = `translate(0)`;
-        return;
-      }
-      let requestId = requestAnimationFrame(animate);
-      count += 10;
-      menu.style.transform = `translate(${count}%)`;
-      if (count === 0) {
-        cancelAnimationFrame(requestId);
-      }
-    };
+    const btnMenu = document.querySelector('.menu'),
+      menu = document.querySelector('menu');
 
     const handlerMenu = (e) => {
-      e.preventDefault();
       const target = e.target;
 
-      if (target.closest('.menu') === null && target.closest('menu') === null) {
-        menu.style.transform = `translate(-100%)`;
-        return;
-      }
+      if (target.closest('.menu')) {
+        menu.classList.toggle('active-menu');
+      } else if (target !== menu && target.closest('[href^="#"]')) {
 
-      if (target.tagName === 'A' && target.className !== 'close-btn') {
-        scrolling(target);
+        menu.classList.toggle('active-menu');
       }
-
-      if (!menu.style.transform || menu.style.transform === `translate(-100%)`) {
-        count = -100;
-        animate();
-      } else if (target.tagName === 'A' || target.closest('.menu')) {
-        menu.style.transform = `translate(-100%)`;
+      if (!target.classList.contains('close-btn')) {
+        menu.style.display = 'flex';
       }
     };
 
-    document.body.addEventListener('click', (e) => {
-      handlerMenu(e);
-    });
+    btnMenu.addEventListener('click', handlerMenu);
+    menu.addEventListener('click', handlerMenu);
 
   };
-
   toggleMenu();
 
   //Модальное окно
@@ -156,27 +133,7 @@ window.addEventListener('DOMContentLoaded', () => {
       }
     });
   };
-
   togglePopup();
-
-  //скролинг
-  const scrolling = (el) => {
-    if (el.href === undefined) return;
-    let link = el.href.split('#')[1];
-    document.querySelector('#' + link).scrollIntoView({
-      behavior: 'smooth',
-      block: 'start'
-    });
-  };
-
-  const scrolHead = () => {
-    const btnScrolling = document.querySelector('a[href="#service-block"]');
-    btnScrolling.addEventListener('click', (e) => {
-      e.preventDefault();
-      scrolling(btnScrolling);
-    });
-  };
-  scrolHead();
 
   //Табы
   const tabs = () => {
@@ -196,7 +153,7 @@ window.addEventListener('DOMContentLoaded', () => {
       }
     };
     toggleTabContent(0);
-    
+
     tabHeader.addEventListener('click', (e) => {
       let target = e.target;
 
@@ -210,14 +167,14 @@ window.addEventListener('DOMContentLoaded', () => {
       }
     });
   };
-
   tabs();
+
   //Слайдер
-  const slider1 = () => {
+  const slider = () => {
     const slide = document.querySelectorAll('.portfolio-item'),
       dots = document.querySelector('.portfolio-dots'),
       slider = document.querySelector('.portfolio-content');
-      
+
     for (let i = 0; i < slide.length; i++) {
       dots.insertAdjacentHTML('beforeend',
         `<li class="dot ${i === 0 ? 'dot-active' : ''}"></li>`);
@@ -303,7 +260,7 @@ window.addEventListener('DOMContentLoaded', () => {
     startSlide();
 
   };
-  slider1();
+  slider();
 
   //переключение фотографий "Наша команда"
   const toggleImageCommand = () => {
@@ -329,84 +286,6 @@ window.addEventListener('DOMContentLoaded', () => {
   };
   toggleImageCommand();
 
-  // проверка инпутов
-  const inputValid = () => {
-    const calc = document.querySelector('#calc'),
-      inputTexts = document.querySelectorAll('input[placeholder="Ваше имя"], input[placeholder="Ваше сообщение"]'),
-      emailInputs = document.querySelectorAll('input[placeholder="E-mail"]'),
-      phoneInputs = document.querySelectorAll('input[placeholder="Номер телефона"]'),
-      inputAll = document.querySelectorAll('input');
-
-
-    const inputCalc = () => {
-      calc.addEventListener('input', (e) => {
-        e.target.value = e.target.value.replace(/[^0-9 \.]/g, '');
-
-      });
-    };
-    inputCalc();
-
-
-    const inputNameText = () => {
-
-      inputTexts.forEach(elem => {
-        elem.addEventListener('input', e => {
-          e.target.value = e.target.value.replace(/[^А-Яа-яёЁ -]/gi, '');
-        });
-      });
-
-    };
-    inputNameText();
-
-    const inputEmail = () => {
-
-      emailInputs.forEach(elem => {
-        elem.addEventListener('input', e => {
-          e.target.value = e.target.value.replace(/[^a-z @ \- ! _ . ~ * '']/gi, '');
-        });
-      });
-
-    };
-    inputEmail();
-
-    const inputPhone = () => {
-
-      phoneInputs.forEach(elem => {
-        elem.addEventListener('input', e => {
-          e.target.value = e.target.value.replace(/[^0-9 \- ()]/gi, '');
-        });
-      });
-
-    };
-    inputPhone();
-
-    const checkInputAll = (elem) => {
-      elem.value = elem.value.trim();
-      elem.value = elem.value.replace(/-+/g, '-');
-      elem.value = elem.value.replace(/ +/g, ' ');
-      elem.value = elem.value.replace(/^-/, '');
-      elem.value = elem.value.replace(/-$/, '');
-      if (elem.closest('input[placeholder="Ваше имя"]')) {
-        let text = elem.value;
-        text = text[0].toUpperCase() + text.substring(1);
-        elem.value = text;
-      }
-    };
-
-    inputAll.forEach((elem) => {
-      elem.addEventListener('blur', e => {
-
-        if (e.target.closest('input')) {
-          checkInputAll(e.target);
-        }
-
-      }, true);
-    });
-
-
-  };
-  inputValid();
-
   //Калькулятор
   const calc = (price = 100) => {
     const calcBlock = document.querySelector('.calc-block'),
@@ -417,29 +296,17 @@ window.addEventListener('DOMContentLoaded', () => {
       calcSelectAll = document.querySelectorAll('select.calc-type'),
       totalValue = document.getElementById('total');
 
-    let animateId;
-    const renderTotal = (sum) => {
-      cancelAnimationFrame(animateId);
-      let total = +totalValue.textContent;
-      const step = (sum - total) / 30;
+    const inputCalc = () => {
+      const calc = document.querySelector('#calc');
+      calc.addEventListener('input', (e) => {
+        e.target.value = e.target.value.replace(/[^0-9 \.]/g, '');
 
-      const calcAnimate = () => {
-        totalValue.textContent = Math.floor(total);
-        if ((step > 0 && total >= sum) ||
-          (step < 0 && total <= sum)) {
-          totalValue.textContent = sum;
-          cancelAnimationFrame(animateId);
-        }
-        else {
-          requestAnimationFrame(calcAnimate);
-        }
-        total += step;
-      };
-
-      if (sum !== total) animateId = requestAnimationFrame(calcAnimate);
+      });
     };
+    inputCalc();
 
     const countSum = () => {
+
       let total = 0,
         countValue = 1,
         dayValue = 10;
@@ -460,18 +327,19 @@ window.addEventListener('DOMContentLoaded', () => {
 
       if (!!typeValue && !!squareValue) {
         total = price * typeValue * squareValue * countValue * dayValue;
+
       }
 
-      return +total.toFixed(0);
-      
-    };
+      totalValue.textContent = +total.toFixed(0);
 
+    };
 
     calcBlock.addEventListener('change', event => {
       const target = event.target;
       if (target.matches('.calc-day') || target.matches('.calc-type') ||
         target.matches('.calc-square') || target.matches('.calc-count')) {
-          renderTotal(countSum());
+        countSum();
+
       }
 
     });
@@ -490,5 +358,300 @@ window.addEventListener('DOMContentLoaded', () => {
 
   };
   calc(100);
+
+  // send-ajax-form
+  const sendForm = () => {
+    const errorMessage = 'Что-то пошло не так...',
+      loadMessage = 'Загрузка...',
+      successMessage = 'Спасибо! Мы скоро с вами свяжемся!';
+
+
+    const preloader = () => {
+      return (`<style>
+      .preloader__container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        width: 100%;
+        overflow: hidden;
+        animation-delay: 1s;
+        background-color: rgba(0,0,0,0.33);
+        
+        position: fixed;
+        left: 0;
+        top: 0;
+            z-index: 999999;
+      }
+      .item-1 {
+        width: 20px;
+        height: 20px;
+        background: #f583a1;
+        border-radius: 50%;
+        margin: 7px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+      @keyframes scale {
+        0% {
+          transform: scale(1);
+        }
+        50%,
+          75% {
+          transform: scale(2.5);
+        }
+        78%, 100% {
+          opacity: 0;
+        }
+      }
+      .item-1:before {
+        content: '';
+        width: 20px;
+        height: 20px;
+        border-radius: 50%;
+        background-color: #eed968;
+        opacity: 0.7;
+        animation: scale 2s infinite cubic-bezier(0, 0, 0.49, 1.02);
+        animation-delay: 100ms;
+        transition: 0.5s all ease;
+        transform: scale(1);
+      }
+      .item-2 {
+        width: 20px;
+        height: 20px;
+        border-radius: 50%;
+        background-color: #eece68;
+        margin: 7px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+      @keyframes scale {
+        0% {
+          transform: scale(1);
+        }
+        50%,
+          75% {
+          transform: scale(2.5);
+        }
+        78%, 100% {
+          opacity: 0;
+        }
+      }
+      .item-2:before {
+        content: '';
+        width: 20px;
+        height: 20px;
+        border-radius: 50%;
+        background-color: #eece68;
+        opacity: 0.7;
+        animation: scale 2s infinite cubic-bezier(0, 0, 0.49, 1.02);
+        animation-delay: 200ms;
+        transition: 0.5s all ease;
+        transform: scale(1);
+      }
+      .item-3 {
+        width: 20px;
+        height: 20px;
+        border-radius: 50%;
+        background-color: #eec368;
+        margin: 7px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+      @keyframes scale {
+        0% {
+          transform: scale(1);
+        }
+        50%,
+          75% {
+          transform: scale(2.5);
+        }
+        78%, 100% {
+          opacity: 0;
+        }
+      }
+      .item-3:before {
+        content: '';
+        width: 20px;
+        height: 20px;
+        border-radius: 50%;
+        background-color: #eec368;
+        opacity: 0.7;
+        animation: scale 2s infinite cubic-bezier(0, 0, 0.49, 1.02);
+        animation-delay: 400ms;
+        transition: 0.5s all ease;
+        transform: scale(1);
+      }
+      .item-4 {
+        width: 20px;
+        height: 20px;
+        border-radius: 50%;
+        background-color: #eead68;
+        margin: 7px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+      @keyframes scale {
+        0% {
+          transform: scale(1);
+        }
+        50%,
+          75% {
+          transform: scale(2.5);
+        }
+        78%, 100% {
+          opacity: 0;
+        }
+      }
+      .item-4:before {
+        content: '';
+        width: 20px;
+        height: 20px;
+        border-radius: 50%;
+        background-color: #eead68;
+        opacity: 0.7;
+        animation: scale 2s infinite cubic-bezier(0, 0, 0.49, 1.02);
+        animation-delay: 600ms;
+        transition: 0.5s all ease;
+        transform: scale(1);
+      }
+      .item-5 {
+        width: 20px;
+        height: 20px;
+        background: #f583a1;
+        border-radius: 50%;
+        background-color: #ee8c68;
+        margin: 7px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+      @keyframes scale {
+        0% {
+          transform: scale(1);
+        }
+        50%,
+          75% {
+          transform: scale(2.5);
+        }
+        78%, 100% {
+          opacity: 0;
+        }
+      }
+      .item-5:before {
+        content: '';
+        width: 20px;
+        height: 20px;
+        border-radius: 50%;
+        background-color: #ee8c68;
+        opacity: 0.7;
+        animation: scale 1s infinite cubic-bezier(0, 0, 0.49, 1.02);
+        animation-delay: 800ms;
+        transition: 0.2s all ease;
+        transform: scale(1);
+      }
+      </style>
+      <div class="preloader">
+        <div class="preloader__container">
+          <div class="item-1"></div>
+          <div class="item-2"></div>
+          <div class="item-3"></div>
+          <div class="item-4"></div>
+          <div class="item-5"></div>
+        </div>
+      </div>`);
+};
+
+    const postData = (body, outputData, errorData) => {
+      const request = new XMLHttpRequest();
+
+      request.addEventListener('readystatechange', () => {
+        if (request.readyState !== 4) {
+          return;
+        }
+
+        if (request.status === 200) {
+          outputData();
+        } else {
+          errorData(request.status);
+        }
+      });
+
+      request.open('POST', './server.php');
+      request.setRequestHeader('Content-Type', 'application/json');
+      request.send(JSON.stringify(body));
+    };
+
+    const clearInput = (idForm) => {
+      const form = document.getElementById(idForm);
+      [...form.elements]
+      .filter(item =>
+          item.tagName.toLowerCase() !== 'button' &&
+          item.type !== 'button')
+        .forEach(item =>
+          item.value = '');
+    };
+
+    const isValid = e => {
+      const target = e.target;
+      if (target.matches('.form-phone')) {
+        target.value = target.value.replace(/[^+\d]/g, '');
+      }
+      if (target.name === 'user_name') {
+        target.value = target.value.replace(/[^а-яё ]/gi, '');
+      }
+      if (target.matches('.mess')) {
+        target.value = target.value.replace(/[^\W а-яё\d]/gi, '');
+      }
+      if (target.matches('.form-email')) {
+        target.value = target.value.replace(/[^a-z @ \- ! _ . ~ * '']/gi, '');
+      }
+    };
+
+    const processingForm = (idForm) => {
+      const form = document.getElementById(idForm);
+      const statusMessage = document.createElement('div');
+
+      statusMessage.style.cssText = 'font-size: 2rem; color: #fff';
+
+      form.addEventListener('submit', event => {
+        const formData = new FormData(form);
+        
+        form.insertAdjacentHTML(`beforeend`, preloader());
+        const loaderForm = document.querySelector('.preloader');
+        
+        const body = {};
+        
+        statusMessage.textContent = loadMessage;
+        event.preventDefault();
+        form.appendChild(statusMessage);
+
+        formData.forEach((val, key) => {
+          body[key] = val;
+        });
+
+        postData(body, () => {
+          statusMessage.textContent = successMessage;
+          clearInput(idForm);
+          loaderForm.remove();
+        }, error => {
+          statusMessage.textContent = errorMessage;
+          console.error(error);
+          loaderForm.remove();
+        });
+      });
+      form.addEventListener('input', isValid);
+
+    };
+    processingForm('form1');
+    processingForm('form2');
+    processingForm('form3');
+
+  };
+  sendForm();
 
 });
